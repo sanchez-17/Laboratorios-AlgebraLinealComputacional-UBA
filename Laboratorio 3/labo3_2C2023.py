@@ -11,6 +11,13 @@ def proyectarPts(T, wz):
     ############### Insert code here!! ######################3
     return xy
 
+def proyectar_pts_3x3(T,wz,ab):
+    T_nueva = np.vstack((T,ab))
+    T_nueva = np.hstack((T_nueva,[0,0,1]))
+    wz = [x.append(1) for x in wz ]
+    xy = np.matmul(T_nueva,wz)
+    return xy
+    
 def circle(r):
     x = np.linspace(-r,r,1000)
     y1 = np.sqrt(r*r - x*x)
@@ -40,9 +47,10 @@ def pointsGrid(corners):
                          
     return wz
           
-def vistform(T, wz, titulo=''):
+def vistform(ab,T, wz, titulo=''):
     # transformar los puntos de entrada usando T
-    xy = proyectarPts(T, wz)
+    #xy = proyectarPts(T, wz)
+    xy = proyectar_pts_3x3(T,wz,ab)
     if xy is None:
         print('No fue implementada correctamente la proyeccion de coordenadas')
         return
@@ -76,27 +84,31 @@ def main():
     T_inv = np.linalg.inv(T_resc)
     corners = np.array([[0,0],[100,100]])
     circunferencia = circle(10)
-    vistform(T_resc, circunferencia, 'Ejer.1:Dilatar')
+    #vistform(T_resc, circunferencia, 'Ejer.1:Dilatar')
     xy = proyectarPts(T_resc,circunferencia)
-    vistform(T_inv, xy, 'Ejer.1:Dilatar T inversa')
+    #vistform(T_inv, xy, 'Ejer.1:Dilatar T inversa')
     #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     #Ejercicio 2
     T = np.array([[1., 0.4],[0,1.]])
     wz = pointsGrid(corners)
-    vistform(T, wz, 'Ejercicio 2')
+    #vistform(T, wz, 'Ejercicio 2')
     #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     #Ejercicio 3
     T_rot = matriz_rotacion(45)
     wz = pointsGrid(corners)
-    vistform(T_rot, wz, 'Ejercicio 3')
+    #vistform(T_rot, wz, 'Ejercicio 3')
     #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     #Ejercicio 4
     T_rot_inv = matriz_rotacion(-45)
     T_rot_esc = T_rot_inv @ T_resc @ T_rot
-    vistform(T_rot_esc, wz, 'Ejercicio 4')
-    vistform(T_rot_esc, circunferencia, 'Ejercicio 4:Circunferencia')
-    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    
+    #vistform(T_rot_esc, wz, 'Ejercicio 4')
+    #vistform(T_rot_esc, circunferencia, 'Ejercicio 4:Circunferencia')
+    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    #Ejercicio 5
+    ab = np.array([5,3])
+    #wz = proyectar_pts_3x3(T,wz,ab)
+    print(T)
+    vistform(ab,T, wz, 'Ejercicio 5')
     
 if __name__ == "__main__":
     main()
